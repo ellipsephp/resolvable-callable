@@ -24,7 +24,7 @@ class ResolvableCallable implements ResolvableValueInterface
     private $delegate;
 
     /**
-     * Set up a resolsavle callable with the given callable and resolvable
+     * Set up a resolvable callable with the given callable and resolvable
      * value.
      *
      * @param callable                              $callable

@@ -8,9 +8,8 @@ use Psr\Container\ContainerInterface;
 use Ellipse\Resolvable\ResolvableValueInterface;
 use Ellipse\Resolvable\ResolvableValue;
 use Ellipse\Resolvable\ResolvableCallable;
-use Ellipse\Resolvable\Callables\ClosureReflectionFactory;
-use Ellipse\Resolvable\Exceptions\ParameterResolvingException;
 use Ellipse\Resolvable\Exceptions\CallableResolvingException;
+use Ellipse\Resolvable\Exceptions\ParameterResolvingException;
 
 describe('ResolvableCallable', function () {
 
