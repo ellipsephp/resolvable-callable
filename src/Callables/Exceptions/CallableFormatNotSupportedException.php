@@ -10,8 +10,10 @@ class CallableFormatNotSupportedException extends RuntimeException implements Re
 {
     public function __construct(callable $callable)
     {
-        $msg = "Unsupported callable format: %s.";
+        $template = "Unsupported callable format: %s";
 
-        parent::__construct(sprintf($msg, print_r($callable, true)));
+        $msg = sprintf($template, print_r($callable, true));
+
+        parent::__construct($msg);
     }
 }

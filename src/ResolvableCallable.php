@@ -49,7 +49,7 @@ class ResolvableCallable implements ResolvableValueInterface
 
         catch (ParameterResolvingException $e) {
 
-            throw new CallableResolvingException($this->callable, $e);
+            throw new CallableResolvingException($e);
 
         }
     }

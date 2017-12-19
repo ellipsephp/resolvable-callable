@@ -6,10 +6,10 @@ use RuntimeException;
 
 class CallableResolvingException extends RuntimeException implements ResolvingExceptionInterface
 {
-    public function __construct(callable $callable, ParameterResolvingException $delegate)
+    public function __construct(ParameterResolvingException $previous)
     {
-        $msg = "The given callable execution failed because $%s value can't be resolved:\n-%s";
+        $msg = "The callable execution failed";
 
-        parent::__construct(sprintf($msg, $delegate->parameter()->getName(), $delegate->getMessage()));
+        parent::__construct($msg, 0, $previous);
     }
 }

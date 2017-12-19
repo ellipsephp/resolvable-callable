@@ -66,7 +66,7 @@ describe('ResolvableCallable', function () {
 
                 };
 
-                $exception = new CallableResolvingException($this->callable, $exception);
+                $exception = new CallableResolvingException($exception);
 
                 expect($test)->toThrow($exception);
 
