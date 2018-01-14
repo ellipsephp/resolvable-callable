@@ -1,90 +1,93 @@
 <?php
 
-use function Eloquent\Phony\Kahlan\stub;
 use function Eloquent\Phony\Kahlan\mock;
+use function Eloquent\Phony\Kahlan\onStatic;
 
 use Psr\Container\ContainerInterface;
 
-use Ellipse\Resolvable\ResolvableValue;
 use Ellipse\Resolvable\ResolvableCallable;
 use Ellipse\Resolvable\ResolvableCallableFactory;
-use Ellipse\Resolvable\Callables\ClosureReflectionFactory;
+use Ellipse\Resolvable\AbstractResolvableCallableFactory;
 
 describe('ResolvableCallableFactory', function () {
 
     beforeEach(function () {
 
-        $this->delegate = mock(ClosureReflectionFactory::class);
-
-        allow(ClosureReflectionFactory::class)->toBe($this->delegate->get());
-
         $this->factory = new ResolvableCallableFactory;
+
+    });
+
+    it('should extend AbstractResolvableCallableFactory', function () {
+
+        expect($this->factory)->toBeAnInstanceOf(AbstractResolvableCallableFactory::class);
 
     });
 
     describe('->__invoke()', function () {
 
-        it('should return a new ResolvableCallable from the given callable', function () {
+        it('should return a new ResolvableCallable from the given closure', function () {
 
-            $callable = stub();
-            $reflection = mock(ReflectionFunctionAbstract::class);
-            $parameters = [
-                mock(ReflectionParameter::class)->get(),
-                mock(ReflectionParameter::class)->get(),
-            ];
-
-            $this->delegate->__invoke->with($callable)->returns($reflection);
-
-            $reflection->getParameters->returns($parameters);
+            $callable = function () {};
 
             $test = ($this->factory)($callable);
 
-            $resolvable = new ResolvableCallable(
-                $callable,
-                new ResolvableValue($callable, $parameters)
-            );
-
-            expect($test)->toEqual($resolvable);
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
 
         });
 
-    });
+        it('should return a new ResolvableCallable from an invokable object', function () {
 
-});
+            $callable = mock(['__invoke' => function () {}])->get();
 
-describe('ResolvableCallableFactory', function () {
+            $test = ($this->factory)($callable);
 
-    beforeAll(function () {
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
 
-        class TestClass {}
+        });
 
-    });
+        it('should return a new ResolvableCallable from an array representing an instance method', function () {
 
-    describe('->__invoke()->value()', function () {
+            $instance = mock(['test' => function () {}])->get();
 
-        it('should execute the given callable', function () {
+            $callable = [$instance, 'test'];
 
-            $instance = new TestClass;
+            $test = ($this->factory)($callable);
 
-            $container = mock(ContainerInterface::class);
-            $placeholders = [2, 3];
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
 
-            $container->get->with(TestClass::class)->returns($instance);
+        });
 
-            $factory = new ResolvableCallableFactory;
+        it('should return a new ResolvableCallable from an array representing a static method', function () {
 
-            $callable = function (TestClass $p1, int $p2 = 0, int $p3, int $p4 = 4) {
+            $class = onStatic(mock(['static test' => function () {}]))->className();
 
-                return [$p1, $p2, $p3, $p4];
+            $callable = [$class, 'test'];
 
-            };
+            $test = ($this->factory)($callable);
 
-            $test = $factory($callable)->value($container->get(), $placeholders);
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
 
-            expect($test[0])->toBe($instance);
-            expect($test[1])->toEqual(2);
-            expect($test[2])->toEqual(3);
-            expect($test[3])->toEqual(4);
+        });
+
+        it('should return a new ResolvableCallable from a string representing a static method', function () {
+
+            $class = onStatic(mock(['static test' => function () {}]))->className();
+
+            $callable = implode('::', [$class, 'test']);
+
+            $test = ($this->factory)($callable);
+
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
+
+        });
+
+        it('should return a new ResolvableCallable from the given function name', function () {
+
+            function resolvable_callable_factory_test() {}
+
+            $test = ($this->factory)('resolvable_callable_factory_test');
+
+            expect($test)->toBeAnInstanceOf(ResolvableCallable::class);
 
         });
 

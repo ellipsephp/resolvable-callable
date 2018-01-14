@@ -27,13 +27,11 @@ describe('FunctionNameReflectionFactory', function () {
 
             it('should return an instance of ReflectionFunction', function () {
 
-                function test () {};
+                function function_name_reflection_factory () {};
 
-                $callable = 'test';
+                $test = ($this->factory)('function_name_reflection_factory');
 
-                $test = ($this->factory)($callable);
-
-                $reflection = new ReflectionFunction($callable);
+                $reflection = new ReflectionFunction('function_name_reflection_factory');
 
                 expect($test)->toEqual($reflection);
 

@@ -18,7 +18,7 @@ describe('ResolvableCallable', function () {
         $this->callable = stub();
         $this->delegate = mock(ResolvableValue::class);
 
-        $this->resolvable = new ResolvableCallable($this->callable, $this->delegate->get());
+        $this->resolvable = new ResolvableCallable($this->delegate->get());
 
     });
 

@@ -36,7 +36,7 @@ describe('MethodArrayReflectionFactory', function () {
 
                 $reflection = new ReflectionMethod($instance, 'test');
 
-                expect($test)->toBeAnInstanceOf(ReflectionMethod::class);
+                expect($test)->toEqual($reflection);
 
             });
 
@@ -46,19 +46,21 @@ describe('MethodArrayReflectionFactory', function () {
 
             it('should return an instance of ReflectionMethod', function () {
 
-                $static = onStatic(mock(['static test' => function () {}]));
+                $class = onStatic(mock(['static test' => function () {}]))->className();
 
-                $callable = [$static->className(), 'test'];
+                $callable = [$class, 'test'];
 
                 $test = ($this->factory)($callable);
 
-                expect($test)->toBeAnInstanceOf(ReflectionMethod::class);
+                $reflection = new ReflectionMethod($class, 'test');
+
+                expect($test)->toEqual($reflection);
 
             });
 
         });
 
-        context('when the given callable is not an invokable object', function () {
+        context('when the given callable is not an array representing an instance or static method', function () {
 
             it('should proxy the delegate ->__invoke() method', function () {
 

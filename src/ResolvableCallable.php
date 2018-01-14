@@ -10,13 +10,6 @@ use Ellipse\Resolvable\Exceptions\CallableResolvingException;
 class ResolvableCallable implements ResolvableValueInterface
 {
     /**
-     * The callable.
-     *
-     * @var callable
-     */
-    private $callable;
-
-    /**
      * The delegate.
      *
      * @var \Ellipse\Resolvable\ResolvableValue
@@ -24,15 +17,12 @@ class ResolvableCallable implements ResolvableValueInterface
     private $delegate;
 
     /**
-     * Set up a resolvable callable with the given callable and resolvable
-     * value.
+     * Set up a resolvable callable with the given delegate.
      *
-     * @param callable                              $callable
-     * @param \Ellipse\Resolvable\ResolvableValue   $delegate
+     * @param \Ellipse\Resolvable\ResolvableValue $delegate
      */
-    public function __construct(callable $callable, ResolvableValue $delegate)
+    public function __construct(ResolvableValue $delegate)
     {
-        $this->callable = $callable;
         $this->delegate = $delegate;
     }
 

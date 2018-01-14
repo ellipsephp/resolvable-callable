@@ -9,21 +9,14 @@ use Ellipse\Resolvable\Callables\MethodStringReflectionFactory;
 use Ellipse\Resolvable\Callables\FunctionNameReflectionFactory;
 use Ellipse\Resolvable\Callables\FaillingCallableReflectionFactory;
 
-class ResolvableCallableFactory
+class ResolvableCallableFactory extends AbstractResolvableCallableFactory
 {
     /**
-     * The delegate.
-     *
-     * @var \Ellipse\Resolvable\Callables\CallableReflectionFactoryInterface
-     */
-    private $delegate;
-
-    /**
-     * Set up a resolvable callable factory.
+     * Set up a resolvable callable factory with a default reflection factory.
      */
     public function __construct()
     {
-        $this->delegate = new ClosureReflectionFactory(
+        parent::__construct(new ClosureReflectionFactory(
             new InvokableObjectReflectionFactory(
                 new MethodArrayReflectionFactory(
                     new MethodStringReflectionFactory(
@@ -33,24 +26,6 @@ class ResolvableCallableFactory
                     )
                 )
             )
-        );
-    }
-
-    /**
-     * Return a new ResolvableValue from the given callable.
-     *
-     * @param callable $callable
-     * @return \Ellipse\Resolvable\ResolvableCallable
-     */
-    public function __invoke(callable $callable): ResolvableCallable
-    {
-        $reflection = ($this->delegate)($callable);
-
-        $parameters = $reflection->getParameters();
-
-        return new ResolvableCallable(
-            $callable,
-            new ResolvableValue($callable, $parameters)
-        );
+        ));
     }
 }

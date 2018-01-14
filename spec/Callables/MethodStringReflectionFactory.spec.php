@@ -24,17 +24,17 @@ describe('MethodStringReflectionFactory', function () {
 
     describe('->__invoke()', function () {
 
-        context('when the given callable is an invokable object', function () {
+        context('when the given callable is a string representing a static method', function () {
 
             it('should return an instance of ReflectionMethod', function () {
 
-                $static = onStatic(mock(['static test' => function () {}]));
+                $class = onStatic(mock(['static test' => function () {}]))->className();
 
-                $callable = implode('::', [$static->className(), 'test']);
+                $callable = implode('::', [$class, 'test']);
 
                 $test = ($this->factory)($callable);
 
-                $reflection = new ReflectionMethod($static->className(), 'test');
+                $reflection = new ReflectionMethod($callable);
 
                 expect($test)->toEqual($reflection);
 
@@ -42,7 +42,7 @@ describe('MethodStringReflectionFactory', function () {
 
         });
 
-        context('when the given callable is not an invokable object', function () {
+        context('when the given callable is not a string representing a static method', function () {
 
             it('should proxy the delegate ->__invoke() method', function () {
 
