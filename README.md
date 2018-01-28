@@ -21,7 +21,7 @@ namespace App;
 
 use Some\Psr11Container;
 
-use Ellipse\Resolvable\ResolvableCallableFactory;
+use Ellipse\Resolvable\DefaultResolvableCallableFactory;
 
 // The callable to resolve.
 $callable = function (SomeClass $p1, int $p2 = 0, int $p3, string $p4 = 'p4') {
@@ -39,7 +39,7 @@ $callable = function (SomeClass $p1, int $p2 = 0, int $p3, string $p4 = 'p4') {
 $container = new Psr11Container;
 
 // Resolve the callable. $resolved value is 'result'.
-$factory = new ResolvableCallableFactory;
+$factory = new DefaultResolvableCallableFactory;
 
 $resolved = $factory($callable)->value($container, [2, 3]);
 ```
