@@ -2,7 +2,6 @@
 
 use function Eloquent\Phony\Kahlan\stub;
 use function Eloquent\Phony\Kahlan\mock;
-use function Eloquent\Phony\Kahlan\partialMock;
 
 use Psr\Container\ContainerInterface;
 

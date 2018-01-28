@@ -17,7 +17,7 @@ describe('DefaultResolvableCallableFactory', function () {
 
     });
 
-    it('should extend ResolvableCallableFactoryInterface', function () {
+    it('should implement ResolvableCallableFactoryInterface', function () {
 
         expect($this->factory)->toBeAnInstanceOf(ResolvableCallableFactoryInterface::class);
 
