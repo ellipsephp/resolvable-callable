@@ -2,30 +2,41 @@
 
 namespace Ellipse\Resolvable;
 
-use Ellipse\Resolvable\Callables\ClosureReflectionFactory;
-use Ellipse\Resolvable\Callables\InvokableObjectReflectionFactory;
-use Ellipse\Resolvable\Callables\MethodArrayReflectionFactory;
-use Ellipse\Resolvable\Callables\MethodStringReflectionFactory;
-use Ellipse\Resolvable\Callables\FunctionNameReflectionFactory;
-use Ellipse\Resolvable\Callables\FaillingCallableReflectionFactory;
+use Ellipse\Resolvable\Callables\CallableReflectionFactoryInterface;
 
-class ResolvableCallableFactory extends AbstractResolvableCallableFactory
+class ResolvableCallableFactory implements ResolvableCallableFactoryInterface
 {
     /**
-     * Set up a resolvable callable factory with a default reflection factory.
+     * The reflection factory.
+     *
+     * @var \Ellipse\Resolvable\Callables\CallableReflectionFactoryInterface
      */
-    public function __construct()
+    private $reflection;
+
+    /**
+     * Set up a resolvable callable factory with the given reflection factory.
+     *
+     * @param \Ellipse\Resolvable\Callables\CallableReflectionFactoryInterface $reflection
+     */
+    public function __construct(CallableReflectionFactoryInterface $reflection)
     {
-        parent::__construct(new ClosureReflectionFactory(
-            new InvokableObjectReflectionFactory(
-                new MethodArrayReflectionFactory(
-                    new MethodStringReflectionFactory(
-                        new FunctionNameReflectionFactory(
-                            new FaillingCallableReflectionFactory
-                        )
-                    )
-                )
-            )
-        ));
+        $this->reflection = $reflection;
+    }
+
+    /**
+     * Return a new ResolvableValue from the given callable.
+     *
+     * @param callable $callable
+     * @return \Ellipse\Resolvable\ResolvableCallable
+     */
+    public function __invoke(callable $callable): ResolvableCallable
+    {
+        $reflection = ($this->reflection)($callable);
+
+        $parameters = $reflection->getParameters();
+
+        return new ResolvableCallable(
+            new ResolvableValue($callable, $parameters)
+        );
     }
 }
