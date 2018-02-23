@@ -2,7 +2,7 @@
 
 This package provides a resolvable callable factory allowing to execute callables using a **[Psr-11 container](http://www.php-fig.org/psr/psr-11/)**.
 
-**Require** php >= 7.1
+**Require** php >= 7.0
 
 **Installation** `composer require ellipse/resolvable-callable`
 
